@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BikeService.Pages
+namespace BikeService.Views.Home
 {
     public class IndexModel : PageModel
     {

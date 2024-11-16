@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService", "BikeService\BikeService.csproj", "{5F5D93B9-E802-411F-BCFC-CE68EBF452F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeService", "BikeService\BikeService.csproj", "{5F5D93B9-E802-411F-BCFC-CE68EBF452F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService.Data", "BikeService.Data\BikeService.Data.csproj", "{4A3CC687-F033-422C-A405-150ECA4A7C87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService.Web.ViewModel", "BikeService.Web.ViewModel\BikeService.Web.ViewModel.csproj", "{93A7F694-F7F4-4AE5-A2AA-DA7452D45B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService.Data.Models", "BikeService.Data.Models\BikeService.Data.Models.csproj", "{DF961CDB-B4DB-470C-BAAF-5A29A1417ECA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService.UnitTests", "BikeService.UnitTests\BikeService.UnitTests.csproj", "{A3B33849-4536-4F0B-8DCC-F28B24DDEAC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeService.Common", "BikeService.Common\BikeService.Common.csproj", "{90C1F7D6-3F6B-4BE5-892A-D51CBAB2D69F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{5F5D93B9-E802-411F-BCFC-CE68EBF452F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5D93B9-E802-411F-BCFC-CE68EBF452F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F5D93B9-E802-411F-BCFC-CE68EBF452F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A3CC687-F033-422C-A405-150ECA4A7C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A3CC687-F033-422C-A405-150ECA4A7C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A3CC687-F033-422C-A405-150ECA4A7C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A3CC687-F033-422C-A405-150ECA4A7C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93A7F694-F7F4-4AE5-A2AA-DA7452D45B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A7F694-F7F4-4AE5-A2AA-DA7452D45B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A7F694-F7F4-4AE5-A2AA-DA7452D45B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A7F694-F7F4-4AE5-A2AA-DA7452D45B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF961CDB-B4DB-470C-BAAF-5A29A1417ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF961CDB-B4DB-470C-BAAF-5A29A1417ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF961CDB-B4DB-470C-BAAF-5A29A1417ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF961CDB-B4DB-470C-BAAF-5A29A1417ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3B33849-4536-4F0B-8DCC-F28B24DDEAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3B33849-4536-4F0B-8DCC-F28B24DDEAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3B33849-4536-4F0B-8DCC-F28B24DDEAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3B33849-4536-4F0B-8DCC-F28B24DDEAC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C1F7D6-3F6B-4BE5-892A-D51CBAB2D69F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C1F7D6-3F6B-4BE5-892A-D51CBAB2D69F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C1F7D6-3F6B-4BE5-892A-D51CBAB2D69F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C1F7D6-3F6B-4BE5-892A-D51CBAB2D69F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
