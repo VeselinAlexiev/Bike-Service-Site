@@ -24,7 +24,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
     {
         base.OnModelCreating(modelBuilder);
 
-        // CartItem relationships
         modelBuilder.Entity<CartItem>()
             .HasOne(ci => ci.Cart)
             .WithMany(c => c.Items)
@@ -37,7 +36,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(ci => ci.PartId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Appointment relationships
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.User)
             .WithMany(u => u.Appointments)
@@ -50,7 +48,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(a => a.ServiceId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // OrderSparePart relationships
         modelBuilder.Entity<OrderSparePart>()
             .HasKey(osp => new { osp.OrderId, osp.PartId });
 
@@ -66,7 +63,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(osp => osp.PartId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // OrderService relationships
         modelBuilder.Entity<OrderService>()
             .HasKey(os => new { os.OrderId, os.ServiceId });
 

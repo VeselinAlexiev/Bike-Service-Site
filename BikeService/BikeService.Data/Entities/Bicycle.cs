@@ -12,7 +12,7 @@ namespace BikeService.Data.Entities
     public class Bicycle
     {
         [Key]
-        public int BicycleId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]

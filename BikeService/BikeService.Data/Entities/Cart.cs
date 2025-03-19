@@ -10,10 +10,10 @@ namespace BikeService.Data.Entities
     public class Cart
     {
         [Key]
-        public int CartId { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; } // Свързване с User
+        public string UserId { get; set; }
 
         public User User { get; set; }
         public ICollection<CartItem> Items { get; set; } = new List<CartItem>();

@@ -11,7 +11,7 @@ namespace BikeService.Data.Entities
     public class SparePart
     {
         [Key]
-        public int PartId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]

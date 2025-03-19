@@ -10,7 +10,7 @@ namespace BikeService.Data.Entities
     public class Appointment
     {
         [Key]
-        public int AppointmentId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string UserId { get; set; }
