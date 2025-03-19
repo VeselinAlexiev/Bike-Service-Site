@@ -1,4 +1,5 @@
 using BikeService.Data;
+using BikeService.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +17,9 @@ namespace BikeService
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<User, IdentityRole>()
+     .AddEntityFrameworkStores<ApplicationDbContext>()
+     .AddDefaultTokenProviders();
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
@@ -41,6 +43,10 @@ namespace BikeService
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
 

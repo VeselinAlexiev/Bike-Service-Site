@@ -17,10 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BikeService.Data\BikeService.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\BikeService.Web.ViewModel\BikeService.Web.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>
