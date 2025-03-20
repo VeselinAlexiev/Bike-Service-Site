@@ -1,11 +1,79 @@
-﻿@page
-@using BikeService.Views.Home;
-@model IndexModel
+﻿@model BikeService.Web.ViewModel.HomeViewModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <!-- Banner Section -->
+    <div class="banner mb-5 text-center position-relative">
+        <img src="https://www.shutterstock.com/image-photo/unrecognizable-silhouette-man-riding-bicycle-600nw-2089758175.jpg" class="img-fluid w-100 shadow-lg"
+             style="height: 600px; object-fit: cover; filter: brightness(50%); border-radius: 15px;"
+             alt="Cyclist at sunset">
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-light">
+            <h1 class="fw-bold text-uppercase animate__animated animate__fadeIn">🚴‍♂️ Ride with Confidence</h1>
+            <p class="fs-4 text-warning animate__animated animate__fadeIn animate__delay-1s">Find the Best Bicycles & Spare Parts in One Place</p>
+            <!-- Smaller Visit Shop Button -->
+            <a href="/Shop" class="btn btn-warning btn-sm fw-bold px-4 shadow-lg animate__animated animate__pulse animate__infinite">Visit Shop</a>
+        </div>
+    </div>
+
+    <!-- Bicycles Section -->
+    <section id="bicycles" class="my-5">
+        <h2 class="text-center text-warning fw-bold mb-4 animate__animated animate__fadeIn">🚴‍♂️ Top Bicycles</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var bicycle in Model.Bicycles)
+            {
+                <div class="col">
+                    <div class="card bg-dark text-white shadow-lg border-light h-100 animate__animated animate__fadeIn animate__delay-1s">
+                        <div class="position-relative">
+                            <img src="@bicycle.ImageUrl" class="card-img-top img-fluid rounded" style="height: 250px; object-fit: cover;" alt="@bicycle.Name">
+
+                            <!-- Sticker: Most Popular -->
+                            <span class="badge bg-success position-absolute top-0 start-0 m-3">Most Popular</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">@bicycle.Name</h5>
+                            <p class="fs-5 text-warning">@bicycle.Price.ToString("C")</p>
+                            <!-- Standard Button for View Details -->
+                            <a href="#" class="btn btn-warning btn-sm fw-bold px-4 animate__animated animate__pulse">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Spare Parts Section -->
+    <section id="spareParts" class="my-5">
+        <h2 class="text-center text-warning fw-bold mb-4 animate__animated animate__fadeIn">🔧 Top Spare Parts</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var part in Model.SpareParts)
+            {
+                <div class="col">
+                    <div class="card bg-dark text-white shadow-lg border-light h-100 animate__animated animate__fadeIn animate__delay-1s">
+                        <div class="position-relative">
+                            <img src="@part.ImageUrl" class="card-img-top img-fluid rounded" style="height: 250px; object-fit: cover;" alt="@part.Name">
+
+                            <!-- Sticker: Most Popular -->
+                            <span class="badge bg-success position-absolute top-0 start-0 m-3">Most Popular</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">@part.Name</h5>
+                            <p class="fs-5 text-warning">@part.Price.ToString("C")</p>
+                            <!-- Standard Button for View Details -->
+                            <a href="#" class="btn btn-warning btn-sm fw-bold px-4 animate__animated animate__pulse">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Service Appointment Section -->
+    <section id="appointment" class="text-center mt-5 p-4 bg-warning text-dark rounded shadow-lg animate__animated animate__fadeIn animate__delay-2s">
+        <h3 class="fw-bold">🛠 Need a Service?</h3>
+        <p>Keep your ride in top condition. Book an appointment now!</p>
+        <!-- Smaller Appointment Button -->
+        <a href="/Appointments/Schedule" class="btn btn-dark btn-sm fw-bold px-4 animate__animated animate__pulse">Schedule Service</a>
+    </section>
 </div>
