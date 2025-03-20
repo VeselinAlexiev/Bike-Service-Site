@@ -23,7 +23,7 @@ namespace BikeService.Data.Entities
 
         [Required]
         [MaxLength(20)]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Scheduled";
 
         public User User { get; set; }
         public Service Service { get; set; }

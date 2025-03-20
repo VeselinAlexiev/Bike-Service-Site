@@ -27,6 +27,9 @@ namespace BikeService.Data.Entities
         [Required]
         public TimeSpan TimeRequired { get; set; }
 
+        [MaxLength(250)]
+        public string Location { get; set; } // Add this line for service location
+
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<OrderService> OrderServices { get; set; } = new List<OrderService>();
     }

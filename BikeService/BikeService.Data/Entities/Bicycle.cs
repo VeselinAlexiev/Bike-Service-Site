@@ -35,9 +35,9 @@ namespace BikeService.Data.Entities
         public string Description { get; set; }
 
         [MaxLength(250)]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } // Added Image URL field for image handling
 
-        public bool EcoFriendly { get; set; }
+        public bool EcoFriendly { get; set; } = false;
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal? BatteryCapacity { get; set; }
@@ -47,6 +47,7 @@ namespace BikeService.Data.Entities
 
         [MaxLength(50)]
         public string Material { get; set; }
+
         public ICollection<AppointmentBicycle> AppointmentBicycles { get; set; }
         public ICollection<BicycleSparePart> BicycleSpareParts { get; set; } = new List<BicycleSparePart>();
     }

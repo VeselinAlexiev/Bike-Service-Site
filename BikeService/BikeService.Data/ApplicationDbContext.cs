@@ -102,5 +102,23 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(bsp => bsp.SparePart)
             .WithMany(sp => sp.BicycleSpareParts)
             .HasForeignKey(bsp => bsp.SparePartId);
+        modelBuilder.Entity<Bicycle>()
+            .Property(b => b.EcoFriendly)
+            .HasDefaultValue(false); // Default value for EcoFriendly
+
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Status)
+            .HasDefaultValue("Scheduled"); // Default value for Status in Appointment
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.OrderDate)
+            .HasDefaultValueSql("GETUTCDATE()"); // Default value for OrderDate
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.Status)
+            .HasDefaultValue("Pending");
+        modelBuilder.Entity<Bicycle>()
+            .Property(b => b.EnergySource)
+            .HasDefaultValue("Unknown");
     }
 }

@@ -18,7 +18,7 @@ namespace BikeService.Data.Entities
         public string UserId { get; set; }
 
         [Required]
-        public DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
@@ -26,7 +26,7 @@ namespace BikeService.Data.Entities
 
         [Required]
         [MaxLength(20)]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Pending";
 
         public User User { get; set; }
         public ICollection<OrderSparePart> OrderSpareParts { get; set; } = new List<OrderSparePart>();
