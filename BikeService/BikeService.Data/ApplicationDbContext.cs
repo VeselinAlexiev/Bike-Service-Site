@@ -14,11 +14,13 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderSparePart> OrderSpareParts { get; set; }
-    public DbSet<OrderService> OrderServices { get; set; }
-    public DbSet<Service> Services { get; set; }
     public DbSet<SparePart> SpareParts { get; set; }
     public DbSet<AppointmentBicycle> AppointmentBicycles { get; set; }
     public DbSet<BicycleSparePart> BicycleSpareParts { get; set; }
+    public DbSet<OrderBicycle> OrderBicycles { get; set; }
+    public DbSet<Workshop> Workshops { get; set; }
+    public DbSet<ServiceType> ServiceTypes { get; set; }
+    public DbSet<WorkshopService> WorkshopServices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,12 +44,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Appointment>()
-            .HasOne(a => a.Service)
-            .WithMany(s => s.Appointments)
-            .HasForeignKey(a => a.ServiceId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         modelBuilder.Entity<OrderSparePart>()
             .HasKey(osp => new { osp.OrderId, osp.PartId });
 
@@ -61,21 +57,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(osp => osp.SparePart)
             .WithMany(sp => sp.OrderSpareParts)
             .HasForeignKey(osp => osp.PartId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<OrderService>()
-            .HasKey(os => new { os.OrderId, os.ServiceId });
-
-        modelBuilder.Entity<OrderService>()
-            .HasOne(os => os.Order)
-            .WithMany(o => o.OrderServices)
-            .HasForeignKey(os => os.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<OrderService>()
-            .HasOne(os => os.Service)
-            .WithMany(s => s.OrderServices)
-            .HasForeignKey(os => os.ServiceId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<AppointmentBicycle>()
@@ -93,7 +74,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(ab => ab.BicycleId)
             .OnDelete(DeleteBehavior.Cascade);
 
-       modelBuilder.Entity<BicycleSparePart>()
+        modelBuilder.Entity<BicycleSparePart>()
             .HasOne(bsp => bsp.Bicycle)
             .WithMany(b => b.BicycleSpareParts)
             .HasForeignKey(bsp => bsp.BicycleId);
@@ -102,23 +83,53 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(bsp => bsp.SparePart)
             .WithMany(sp => sp.BicycleSpareParts)
             .HasForeignKey(bsp => bsp.SparePartId);
+
         modelBuilder.Entity<Bicycle>()
             .Property(b => b.EcoFriendly)
-            .HasDefaultValue(false); // Default value for EcoFriendly
+            .HasDefaultValue(false);
 
         modelBuilder.Entity<Appointment>()
             .Property(a => a.Status)
-            .HasDefaultValue("Scheduled"); // Default value for Status in Appointment
+            .HasDefaultValue("Scheduled");
 
         modelBuilder.Entity<Order>()
             .Property(o => o.OrderDate)
-            .HasDefaultValueSql("GETUTCDATE()"); // Default value for OrderDate
+            .HasDefaultValueSql("GETUTCDATE()");
 
         modelBuilder.Entity<Order>()
             .Property(o => o.Status)
             .HasDefaultValue("Pending");
+
         modelBuilder.Entity<Bicycle>()
             .Property(b => b.EnergySource)
             .HasDefaultValue("Unknown");
+
+        modelBuilder.Entity<WorkshopService>()
+            .HasKey(ws => new { ws.WorkshopId, ws.ServiceTypeId });
+
+        modelBuilder.Entity<WorkshopService>()
+            .HasOne(ws => ws.Workshop)
+            .WithMany(w => w.WorkshopServices)
+            .HasForeignKey(ws => ws.WorkshopId);
+
+        modelBuilder.Entity<WorkshopService>()
+            .HasOne(ws => ws.ServiceType)
+            .WithMany(st => st.WorkshopServices)
+            .HasForeignKey(ws => ws.ServiceTypeId);
+
+        modelBuilder.Entity<OrderBicycle>()
+            .HasKey(ob => new { ob.OrderId, ob.BicycleId });
+
+        modelBuilder.Entity<OrderBicycle>()
+            .HasOne(ob => ob.Order)
+            .WithMany(o => o.OrderBicycles)
+            .HasForeignKey(ob => ob.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<OrderBicycle>()
+            .HasOne(ob => ob.Bicycle)
+            .WithMany()
+            .HasForeignKey(ob => ob.BicycleId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
