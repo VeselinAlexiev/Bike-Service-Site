@@ -1,0 +1,90 @@
+﻿@model BikeService.Data.Entities.Workshop
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Workshop</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input asp-for="Location" class="form-control" id="Location" />
+    </div>
+    <input type="hidden" name="Latitude" id="latitude" value="@Model.Latitude" />
+    <input type="hidden" name="Longitude" id="longitude" value="@Model.Longitude" />
+    <div id="map" style="height: 400px;" class="mb-4"></div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13);
+        let marker = L.marker([@Model.Latitude, @Model.Longitude], { draggable: true }).addTo(map);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        async function reverseGeocode(lat, lon) {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            return data.display_name || '';
+        }
+
+        async function geocodeAndZoom(address) {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+            const data = await res.json();
+            if (data.length > 0) {
+                const { lat, lon } = data[0];
+                const latNum = parseFloat(lat);
+                const lonNum = parseFloat(lon);
+                map.setView([latNum, lonNum], 15);
+                return [latNum, lonNum];
+            }
+            return null;
+        }
+
+        function bindGeocodeEvents() {
+            const locInput = document.querySelector("#Location");
+            if (locInput) {
+                locInput.addEventListener("blur", async () => {
+                    const coords = await geocodeAndZoom(locInput.value);
+                    if (coords) {
+                        const [lat, lon] = coords;
+                        document.getElementById("latitude").value = lat;
+                        document.getElementById("longitude").value = lon;
+                        marker.setLatLng([lat, lon]);
+                    }
+                });
+            }
+
+            marker.on("dragend", async function () {
+                const { lat, lng } = marker.getLatLng();
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lng;
+                const address = await reverseGeocode(lat, lng);
+                if (address && locInput) locInput.value = address;
+            });
+
+            map.on("click", async function (e) {
+                const { lat, lng } = e.latlng;
+                marker.setLatLng([lat, lng]);
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lng;
+                const address = await reverseGeocode(lat, lng);
+                if (address && locInput) locInput.value = address;
+            });
+        }
+
+        bindGeocodeEvents();
+    </script>
+}

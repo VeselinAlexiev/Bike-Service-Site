@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BikeService.Data.Entities.WorkshopService>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">Manage Workshop Services</h2>
+<a class="btn btn-success mb-3" asp-action="Create">Add New Service to Workshop</a>
+
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>Workshop</th>
+            <th>Service</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var link in Model)
+        {
+            <tr>
+                <td>@link.Workshop.Name</td>
+                <td>@link.ServiceType.Title</td>
+                <td>$@link.Price</td>
+                <td>@link.TimeRequired</td>
+                <td>
+                    <form asp-action="Delete" asp-route-workshopId="@link.WorkshopId" asp-route-serviceTypeId="@link.ServiceTypeId" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

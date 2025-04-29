@@ -1,0 +1,14 @@
+﻿@model BikeService.Data.Entities.SparePart
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Spare Part</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    @{
+        await Html.RenderPartialAsync("~/Views/Shared/_SparePartFormPartial.cshtml", Model);
+    }
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

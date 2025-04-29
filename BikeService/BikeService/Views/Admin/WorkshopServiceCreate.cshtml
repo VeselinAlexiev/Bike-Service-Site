@@ -1,0 +1,46 @@
+﻿@model BikeService.Data.Entities.WorkshopService
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var workshops = ViewBag.Workshops as List<BikeService.Data.Entities.Workshop>;
+    var serviceTypes = ViewBag.ServiceTypes as List<BikeService.Data.Entities.ServiceType>;
+}
+
+<h2>Assign Service to Workshop</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Workshop</label>
+        <select asp-for="WorkshopId" class="form-select">
+            @foreach (var w in workshops)
+            {
+                <option value="@w.Id">@w.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Service Type</label>
+        <select asp-for="ServiceTypeId" class="form-select">
+            @foreach (var s in serviceTypes)
+            {
+                <option value="@s.Id">@s.Title</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TimeRequired" class="form-label"></label>
+        <input asp-for="TimeRequired" class="form-control" />
+        <span asp-validation-for="TimeRequired" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
