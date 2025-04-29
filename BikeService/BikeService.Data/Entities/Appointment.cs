@@ -16,7 +16,7 @@ namespace BikeService.Data.Entities
         public string UserId { get; set; }
 
         [Required]
-        public int ServiceId { get; set; }
+        public int WorkshopId { get; set; }
 
         [Required]
         public DateTime AppointmentDate { get; set; }
@@ -25,8 +25,11 @@ namespace BikeService.Data.Entities
         [MaxLength(20)]
         public string Status { get; set; } = "Scheduled";
 
+        [MaxLength(500)]
+        public string Notes { get; set; }
+
         public User User { get; set; }
-        public Service Service { get; set; }
+        public Workshop Workshop { get; set; }
         public ICollection<AppointmentBicycle> AppointmentBicycles { get; set; } = new List<AppointmentBicycle>();
     }
 }
