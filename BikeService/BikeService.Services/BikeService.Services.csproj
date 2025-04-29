@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Implementation\NewFolder\**" />
+    <EmbeddedResource Remove="Implementation\NewFolder\**" />
+    <None Remove="Implementation\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.36" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BikeService.Data\BikeService.Data.csproj" />
+    <ProjectReference Include="..\BikeService.Web.ViewModel\BikeService.Web.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>
