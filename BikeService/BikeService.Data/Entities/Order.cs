@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BikeService.Data.Entities
 {
@@ -28,8 +22,20 @@ namespace BikeService.Data.Entities
         [MaxLength(20)]
         public string Status { get; set; } = "Pending";
 
+        [Required]
+        [MaxLength(200)]
+        public string Address { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(20)]
+        public string Phone { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(30)]
+        public string PaymentMethod { get; set; } = "Cash on Delivery";
+
         public User User { get; set; }
         public ICollection<OrderSparePart> OrderSpareParts { get; set; } = new List<OrderSparePart>();
-        public ICollection<OrderService> OrderServices { get; set; } = new List<OrderService>();
+        public ICollection<OrderBicycle> OrderBicycles { get; set; } = new List<OrderBicycle>();
     }
 }
