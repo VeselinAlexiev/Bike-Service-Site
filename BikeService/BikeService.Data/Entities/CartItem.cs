@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BikeService.Data.Entities
 {
@@ -17,8 +11,8 @@ namespace BikeService.Data.Entities
         [Required]
         public int CartId { get; set; }
 
-        [Required]
-        public int PartId { get; set; }
+        public int? PartId { get; set; }
+        public int? BicycleId { get; set; }
 
         [Required]
         public int Quantity { get; set; }
@@ -29,5 +23,6 @@ namespace BikeService.Data.Entities
 
         public Cart Cart { get; set; }
         public SparePart SparePart { get; set; }
+        public Bicycle Bicycle { get; set; }
     }
 }
