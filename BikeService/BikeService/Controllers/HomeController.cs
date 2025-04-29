@@ -21,29 +21,27 @@ namespace BikeService.Controllers
         {
             var viewModel = new HomeViewModel
             {
-                // Get top 3 bicycles ordered by price descending
                 Bicycles = _context.Bicycles
-                    .OrderByDescending(b => b.Price)  // Order by price descending
-                    .Take(3)  // Get top 3
+                    .OrderByDescending(b => b.Price)
+                    .Take(3)
                     .Select(b => new ProductViewModel
                     {
                         Id = b.Id,
                         Name = b.Model,
                         ImageUrl = b.ImageUrl,
-                        Price = b.Price  // Include Price
+                        Price = b.Price
                     })
                     .ToList(),
 
-                // Get top 3 spare parts ordered by price descending
                 SpareParts = _context.SpareParts
-                    .OrderByDescending(sp => sp.Price)  // Order by price descending
-                    .Take(3)  // Get top 3
+                    .OrderByDescending(sp => sp.Price)
+                    .Take(3)
                     .Select(sp => new ProductViewModel
                     {
                         Id = sp.Id,
                         Name = sp.Name,
                         ImageUrl = sp.ImageUrl,
-                        Price = sp.Price  // Include Price
+                        Price = sp.Price
                     })
                     .ToList(),
             };
