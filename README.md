@@ -48,7 +48,7 @@
 
 1. Клонирайте репозиторията:
 ```bash
-git clone https://github.com/your-username/BikeService.git
+git clone https://github.com/VeselinAlexiev/Bike-Service-Site.git
 ```
 
 2. Настройте връзката с база данни в appsettings.json
