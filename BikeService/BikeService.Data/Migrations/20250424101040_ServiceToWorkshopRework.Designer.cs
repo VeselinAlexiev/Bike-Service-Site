@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeService.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424101040_ServiceToWorkshopRework")]
+    partial class ServiceToWorkshopRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,11 +33,6 @@ namespace BikeService.Data.Migrations
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -188,13 +185,10 @@ namespace BikeService.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BicycleId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PartId")
+                    b.Property<int>("PartId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -204,8 +198,6 @@ namespace BikeService.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BicycleId");
 
                     b.HasIndex("CartId");
 
@@ -222,25 +214,10 @@ namespace BikeService.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -261,26 +238,6 @@ namespace BikeService.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("BikeService.Data.Entities.OrderBicycle", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    b.Property<int>("BicycleId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "BicycleId");
-
-                    b.HasIndex("BicycleId");
-
-                    b.ToTable("OrderBicycle");
                 });
 
             modelBuilder.Entity("BikeService.Data.Entities.OrderSparePart", b =>
@@ -416,9 +373,6 @@ namespace BikeService.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("WorkshopId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -428,8 +382,6 @@ namespace BikeService.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("WorkshopId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -687,10 +639,6 @@ namespace BikeService.Data.Migrations
 
             modelBuilder.Entity("BikeService.Data.Entities.CartItem", b =>
                 {
-                    b.HasOne("BikeService.Data.Entities.Bicycle", "Bicycle")
-                        .WithMany()
-                        .HasForeignKey("BicycleId");
-
                     b.HasOne("BikeService.Data.Entities.Cart", "Cart")
                         .WithMany("Items")
                         .HasForeignKey("CartId")
@@ -700,9 +648,8 @@ namespace BikeService.Data.Migrations
                     b.HasOne("BikeService.Data.Entities.SparePart", "SparePart")
                         .WithMany()
                         .HasForeignKey("PartId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Bicycle");
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Cart");
 
@@ -718,25 +665,6 @@ namespace BikeService.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BikeService.Data.Entities.OrderBicycle", b =>
-                {
-                    b.HasOne("BikeService.Data.Entities.Bicycle", "Bicycle")
-                        .WithMany()
-                        .HasForeignKey("BicycleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BikeService.Data.Entities.Order", "Order")
-                        .WithMany("OrderBicycles")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bicycle");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("BikeService.Data.Entities.OrderSparePart", b =>
@@ -756,15 +684,6 @@ namespace BikeService.Data.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("SparePart");
-                });
-
-            modelBuilder.Entity("BikeService.Data.Entities.User", b =>
-                {
-                    b.HasOne("BikeService.Data.Entities.Workshop", "Workshop")
-                        .WithMany()
-                        .HasForeignKey("WorkshopId");
-
-                    b.Navigation("Workshop");
                 });
 
             modelBuilder.Entity("BikeService.Data.Entities.WorkshopService", b =>
@@ -856,8 +775,6 @@ namespace BikeService.Data.Migrations
 
             modelBuilder.Entity("BikeService.Data.Entities.Order", b =>
                 {
-                    b.Navigation("OrderBicycles");
-
                     b.Navigation("OrderSpareParts");
                 });
 
