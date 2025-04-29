@@ -1,0 +1,183 @@
+﻿@model IEnumerable<BikeService.Web.ViewModel.Service.ServiceViewModel>
+@using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json
+@inject SignInManager<BikeService.Data.Entities.User> SignInManager
+
+@{
+    ViewData["Title"] = "Service Booking";
+    var isLoggedIn = SignInManager.IsSignedIn(User);
+}
+
+<div class="container mt-5 text-light">
+    <h2 class="text-center fw-bold text-warning mb-4">📍 Book a Bike Service</h2>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label class="form-label text-secondary">Sort by:</label>
+            <select id="sortSelector" class="form-select form-select-sm bg-dark text-white border-warning w-100">
+                <option value="closest" selected>Closest to me</option>
+                <option value="nameAZ">Name: A to Z</option>
+                <option value="nameZA">Name: Z to A</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label text-secondary">Max Distance (km):</label>
+            <input type="number" id="distanceFilter" class="form-control form-control-sm bg-dark text-white border-warning w-100" placeholder="e.g. 100">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label text-secondary">Service Type:</label>
+            <select id="serviceTypeFilter" class="form-select form-select-sm bg-dark text-white border-warning w-100">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label text-secondary">Search by name:</label>
+            <input type="text" id="searchInput" class="form-control form-control-sm bg-dark text-white border-warning w-100" placeholder="Search workshop...">
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div id="serviceList" class="list-group"></div>
+            <div class="text-center mt-3">
+                <div class="p-3 bg-dark border border-warning rounded">
+                    <button id="loadMoreBtn" class="btn btn-outline-warning fw-bold w-100">Show more...</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card bg-dark shadow border-warning">
+                <div class="card-header text-warning fw-bold">Map of Our Service Points</div>
+                <div class="card-body p-0">
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const serviceData = @Html.Raw(JsonConvert.SerializeObject(Model));
+        const isLoggedIn = @(isLoggedIn.ToString().ToLower());
+        let userLat = null, userLon = null;
+        let map;
+        let visibleCount = 4;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            map = L.map('map').setView([42.7339, 25.4858], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            navigator.geolocation.getCurrentPosition(pos => {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                initializeServiceView();
+            }, err => {
+                userLat = 42.6975;
+                userLon = 23.3242;
+                initializeServiceView();
+            });
+
+            function initializeServiceView() {
+                populateServiceTypeFilter();
+                refreshServiceList();
+
+                document.getElementById('sortSelector').addEventListener('change', resetVisibleAndRefresh);
+                document.getElementById('distanceFilter').addEventListener('input', resetVisibleAndRefresh);
+                document.getElementById('serviceTypeFilter').addEventListener('change', resetVisibleAndRefresh);
+                document.getElementById('searchInput').addEventListener('input', resetVisibleAndRefresh);
+                document.getElementById("loadMoreBtn").addEventListener("click", () => {
+                    visibleCount += 4;
+                    refreshServiceList();
+                });
+            }
+        });
+
+        function resetVisibleAndRefresh() {
+            visibleCount = 4;
+            refreshServiceList();
+        }
+
+        function populateServiceTypeFilter() {
+            const types = new Set(serviceData.map(s => s.ServiceType).filter(Boolean));
+            const dropdown = document.getElementById('serviceTypeFilter');
+            dropdown.innerHTML = `<option value="">All</option>`;
+            types.forEach(type => {
+                const opt = document.createElement("option");
+                opt.value = type;
+                opt.textContent = type;
+                dropdown.appendChild(opt);
+            });
+        }
+
+        function refreshServiceList() {
+            const sort = document.getElementById('sortSelector').value;
+            const distanceInput = parseFloat(document.getElementById('distanceFilter').value);
+            const maxDistance = isNaN(distanceInput) ? Infinity : distanceInput;
+            const type = document.getElementById('serviceTypeFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            let list = [...serviceData];
+
+            list.forEach(s => {
+                s.distance = getDistance(userLat, userLon, s.Latitude, s.Longitude);
+            });
+
+            list = list.filter(s => s.distance <= maxDistance);
+
+            if (type) list = list.filter(s => s.ServiceType === type);
+            if (search) list = list.filter(s => s.WorkshopName.toLowerCase().includes(search));
+
+            if (sort === "closest") list.sort((a, b) => a.distance - b.distance);
+            if (sort === "nameAZ") list.sort((a, b) => a.WorkshopName.localeCompare(b.WorkshopName));
+            if (sort === "nameZA") list.sort((a, b) => b.WorkshopName.localeCompare(a.WorkshopName));
+
+            const container = document.getElementById('serviceList');
+            container.innerHTML = "";
+            map.eachLayer(l => { if (l instanceof L.Marker) map.removeLayer(l); });
+
+            let added = 0;
+            list.forEach(s => {
+                if (added < visibleCount) {
+                    const div = document.createElement('div');
+                    div.className = 'list-group-item list-group-item-action bg-dark text-light border-light mb-3';
+                    div.innerHTML = `
+                        <div class='d-flex w-100 justify-content-between'>
+                            <h5 class='mb-1'>${s.WorkshopName}</h5>
+                            <small class='text-info'>${s.distance.toFixed(1)} km</small>
+                        </div>
+                        <p class='mb-1 text-secondary-emphasis'>${s.Location}</p>
+                        <div class='d-flex justify-content-between align-items-center'>
+                            <a class='btn btn-sm btn-outline-warning' href='/Service/Details/${s.Id}'>View</a>
+                        </div>`;
+                    container.appendChild(div);
+                    added++;
+                }
+
+                const marker = L.marker([s.Latitude, s.Longitude]).addTo(map);
+                marker.bindPopup(`<strong>${s.WorkshopName}</strong><br><button class='btn btn-sm btn-warning mt-2' onclick='viewWorkshop(${s.Id})'>View</button>`);
+            });
+
+            document.getElementById("loadMoreBtn").classList.toggle("d-none", list.length <= visibleCount);
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function viewWorkshop(id) {
+            window.location.href = `/Service/Details/${id}`;
+        }
+    </script>
+}

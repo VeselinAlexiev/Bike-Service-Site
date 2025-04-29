@@ -1,0 +1,93 @@
+﻿@model BikeService.Web.ViewModel.Service.ServiceDetailsViewModel
+@{
+    ViewData["Title"] = "Service Details";
+}
+
+<div class="container mt-5 text-light">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning fw-bold">🔧 @Model.Name</h2>
+        <div class="p-2 bg-dark border border-warning rounded">
+            <a href="/Service" class="btn btn-outline-warning fw-bold w-100">← Back to All Services</a>
+        </div>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-4">
+        <h5 class="text-muted mb-2">📍 Location:</h5>
+        <p class="text-light-emphasis">@Model.Location</p>
+        <div id="map" style="height: 300px;" class="rounded border border-warning"></div>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-5">
+        <h4 class="text-warning mb-3">🛠 Available Services</h4>
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            @foreach (var s in Model.Services)
+            {
+                <div class="col">
+                    <div class="card bg-secondary text-light border-warning h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">@s.Title</h5>
+                            <p class="card-text text-dark">@s.Description</p>
+                            <p class="text-info">Time Required: @s.TimeRequired.TotalMinutes mins</p>
+                            <p class="text-success">Price: $@s.Price.ToString("F2")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-5">
+        <h4 class="text-warning mb-3">📅 Book an Appointment</h4>
+        <form method="post" action="/Appointment/Create">
+            <input type="hidden" name="WorkshopId" value="@Model.WorkshopId" />
+
+            <div class="mb-3">
+                <label class="form-label">Select Bicycle Model</label>
+                <select name="BicycleId" class="form-select bg-dark text-white border-warning" required>
+                    <option disabled selected>Select a bicycle...</option>
+                    @foreach (var b in Model.BicycleModels)
+                    {
+                        <option value="@b.Id">@b.Brand @b.Model (@b.Year) - @b.Type</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="AppointmentDate" class="form-control bg-dark text-white border-warning" min="@DateTime.Today.AddDays(2).ToString("yyyy-MM-dd")" required />
+                <small class="text-secondary">* Only weekdays are accepted</small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Time</label>
+                <select name="Time" class="form-select bg-dark text-white border-warning" required>
+                    @for (int h = 9; h <= 17; h++)
+                    {
+                        <option>@h:00</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Additional Notes (optional)</label>
+                <textarea name="Notes" rows="3" class="form-control bg-dark text-white border-warning"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-warning fw-bold w-100">Make Appointment</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script>
+        const map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
+            .bindPopup("@Model.Name").openPopup();
+    </script>
+}
