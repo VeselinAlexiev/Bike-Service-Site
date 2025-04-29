@@ -1,0 +1,84 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%;">
+        <div class="card-body">
+            <h2 class="text-center mb-4 fw-bold text-warning">Welcome Back!</h2>
+            <p class="text-center text-muted fw-bold">Please log in to continue</p>
+            <hr />
+
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Enter your email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="current-password" placeholder="Enter your password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label asp-for="Input.RememberMe" class="form-check-label">
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+
+                <button id="login-submit" type="submit" class="btn btn-primary w-100">Log in</button>
+
+                <!-- Forgot Password Button (Smaller) -->
+                <div class="text-center mt-3">
+                    <a id="forgot-password" asp-page="./ForgotPassword" class="btn btn-sm btn-warning px-4">Forgot Password?</a>
+                </div>
+
+                <!-- Register Button (Smaller) -->
+                <div class="text-center mt-2">
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="btn btn-sm btn-outline-secondary px-4">Register</a>
+                </div>
+            </form>
+
+            <hr class="my-4" />
+
+            <h5 class="text-center mb-3">Or sign in with</h5>
+            @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div class="alert alert-warning text-center">
+                    <p>
+                        No external authentication services configured. See this
+                        <a href="https://go.microsoft.com/fwlink/?LinkID=532715">guide</a>.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex justify-content-center gap-3">
+                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <button type="submit" name="provider" value="Google" class="btn btn-light border btn-sm">
+                            <img src="~/img/google-logo.png" alt="Google Login" width="20" class="me-2"> Google
+                        </button>
+                    </form>
+
+                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <button type="submit" name="provider" value="Facebook" class="btn btn-light border btn-sm">
+                            <img src="~/img/facebook-logo.png" alt="Facebook Login" width="20" class="me-2"> Facebook
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

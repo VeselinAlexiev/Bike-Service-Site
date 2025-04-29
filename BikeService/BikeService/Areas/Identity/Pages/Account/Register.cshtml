@@ -1,0 +1,81 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%;">
+        <div class="card-body">
+            <h2 class="text-center mb-3 text-primary fw-bold text-warning">Create an Account</h2>
+            <p class="text-center text-muted fw-bold">Join us and start your journey!</p>
+            <hr />
+
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Enter your email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" placeholder="Enter your password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" placeholder="Confirm password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="btn btn-primary w-100">Register</button>
+
+                <div class="text-center mt-3">
+                    <p class="text-muted">
+                        Already have an account?
+                        <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none">Log in here</a>
+                    </p>
+                </div>
+            </form>
+
+            <hr class="my-4" />
+
+            <h5 class="text-center mb-3">Or sign up with</h5>
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div class="alert alert-warning text-center">
+                        <p>
+                            No external authentication services configured. See this
+                            <a href="https://go.microsoft.com/fwlink/?LinkID=532715">guide</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center gap-3">
+                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <button type="submit" name="provider" value="Google" class="btn btn-light border">
+                                <img src="~/img/google-logo.png" alt="Google Login" width="24" class="me-2"> Google
+                            </button>
+                        </form>
+
+                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <button type="submit" name="provider" value="Facebook" class="btn btn-light border">
+                                <img src="~/img/facebook-logo.png" alt="Facebook Login" width="24" class="me-2"> Facebook
+                            </button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
