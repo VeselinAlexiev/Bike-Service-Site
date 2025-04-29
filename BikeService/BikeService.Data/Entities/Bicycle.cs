@@ -35,7 +35,7 @@ namespace BikeService.Data.Entities
         public string Description { get; set; }
 
         [MaxLength(250)]
-        public string ImageUrl { get; set; } // Added Image URL field for image handling
+        public string ImageUrl { get; set; }
 
         public bool EcoFriendly { get; set; } = false;
 
