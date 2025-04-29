@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BikeService.Data.Entities.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container mt-5 text-light">
+    <h2 class="text-warning fw-bold mb-4 text-center">📦 My Orders</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            You haven't placed any orders yet.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var order in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card bg-dark border-light shadow">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-white">Order #@order.Id</span>
+                            <span class="badge
+                                @(order.Status == "Pending" ? "bg-info text-dark" :
+                                order.Status == "Processing" ? "bg-warning text-dark" :
+                                order.Status == "Completed" ? "bg-success" :
+                                "bg-danger")">
+                                @order.Status
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Date:</strong> @order.OrderDate.ToString("dd MMM yyyy - HH:mm")</p>
+                            <p><strong>Total:</strong> <span class="text-warning fw-bold">@order.TotalAmount.ToString("C")</span></p>
+                            <div class="d-grid">
+                                <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-outline-warning fw-bold">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div

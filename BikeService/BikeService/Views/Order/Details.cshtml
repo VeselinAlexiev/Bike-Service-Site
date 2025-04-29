@@ -1,0 +1,81 @@
+﻿@model BikeService.Data.Entities.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-5 text-light">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning fw-bold">📋 Order #@Model.Id Details</h2>
+        <a href="@User.IsInRole("Admin") || User.IsInRole(" Employee") ? Url.Action("AllOrders", "Order" ) : Url.Action("MyOrders", "Order" )"
+           class="btn btn-outline-light">
+            ← Back to Orders
+        </a>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-4">
+        <h5 class="text-muted mb-2">🛒 Status:</h5>
+        <span class="badge
+        @(Model.Status == "Pending" ? "bg-info text-dark" :
+                  Model.Status == "Processing" ? "bg-warning text-dark" :
+                  Model.Status == "Completed" ? "bg-success" : "bg-danger") fs-6">
+        @Model.Status
+        </span>
+
+        <h5 class="text-muted mt-4 mb-2">📆 Date:</h5>
+        <p class="text-light-emphasis">@Model.OrderDate.ToString("dddd, dd MMMM yyyy - HH:mm")</p>
+
+        <h5 class="text-muted mt-4 mb-2">📍 Address:</h5>
+        <p class="text-light-emphasis">@Model.Address</p>
+
+        <h5 class="text-muted mt-4 mb-2">📞 Phone:</h5>
+        <p class="text-light-emphasis">@Model.Phone</p>
+
+        <h5 class="text-muted mt-4 mb-2">💵 Total Amount:</h5>
+        <p class="text-warning fw-bold fs-4">@Model.TotalAmount.ToString("C")</p>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-5">
+        <h4 class="text-warning mb-4">🛍 Ordered Items</h4>
+
+        @if (!Model.OrderSpareParts.Any() && !Model.OrderBicycles.Any())
+        {
+            <div class="alert alert-info text-center">
+                No items found in this order.
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var item in Model.OrderSpareParts)
+                {
+                    <div class="col-md-6">
+                        <div class="card bg-secondary border-light shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-warning">@item.SparePart?.Name</h5>
+                                <p class="card-text text-light-emphasis">@item.SparePart?.Description</p>
+                                <p><strong>Quantity:</strong> @item.Quantity</p>
+                                <p><strong>Subtotal:</strong> @(item.SparePart?.Price * item.Quantity).ToString("C")</p>
+                                <span class="badge bg-info">Spare Part</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @foreach (var item in Model.OrderBicycles)
+                {
+                    <div class="col-md-6">
+                        <div class="card bg-secondary border-light shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-warning">@item.Bicycle?.Brand @item.Bicycle?.Model (@item.Bicycle?.Year)</h5>
+                                <p class="card-text text-light-emphasis">@item.Bicycle?.Description</p>
+                                <p><strong>Quantity:</strong> @item.Quantity</p>
+                                <p><strong>Subtotal:</strong> @(item.Bicycle?.Price * item.Quantity).ToString("C")</p>
+                                <span class="badge bg-primary">Bicycle</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
