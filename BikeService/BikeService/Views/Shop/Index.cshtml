@@ -1,0 +1,71 @@
+﻿@model BikeService.Web.ViewModel.Shop.ShopIndexViewModel
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<div class="container mt-4 text-white">
+    <h2 class="text-warning fw-bold text-center mb-4 animate__animated animate__fadeIn">🛒 Explore Our Shop</h2>
+
+    <!-- Filter, Sort & Search Form -->
+    <form method="get" class="row g-3 mb-4 animate__animated animate__fadeIn animate__delay-1s">
+        <div class="col-md-3">
+            <label class="form-label text-warning">Category</label>
+            <select class="form-select bg-dark text-white" name="category">
+                <option value="">All</option>
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat" selected="@(Model.Category == cat ? "selected" : null)">@cat</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label text-warning">Sort By</label>
+            <select class="form-select bg-dark text-white" name="sortOption">
+                <option value="">Default</option>
+                @foreach (var sort in Model.SortOptions)
+                {
+                    <option value="@sort" selected="@(Model.SortOption == sort ? "selected" : null)">@sort</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label text-warning">Search</label>
+            <input type="text" class="form-control bg-dark text-white" name="searchTerm" value="@Model.SearchTerm" placeholder="Search products...">
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-warning fw-bold w-100">Apply</button>
+            <a href="/Shop/ClearFilters" class="btn btn-secondary fw-bold w-100">Clear</a>
+        </div>
+    </form>
+
+    <!-- Total Results Badge -->
+    <div class="mb-3">
+        <span class="badge bg-success fs-6 p-2">@Model.TotalResults result@(Model.TotalResults == 1 ? "" : "s") found</span>
+    </div>
+
+    <!-- Items Grid -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model.Items)
+        {
+            <div class="col animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="card bg-dark text-white h-100 shadow border border-light">
+                    <div class="position-relative">
+                        <img src="@item.ImageUrl" class="card-img-top img-fluid rounded" style="height: 250px; object-fit: cover;" alt="@item.Name">
+                        <span class="badge bg-info position-absolute top-0 end-0 m-2">@item.Type</span>
+                        @if (item.Type == "Bicycle" && item.Name.ToLower().Contains("eco"))
+                        {
+                            <span class="badge bg-success position-absolute top-0 start-0 m-2">Eco</span>
+                        }
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">@item.Name</h5>
+                        <p class="fs-5 text-warning">@item.Price.ToString("C")</p>
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-warning btn-sm fw-bold px-4 animate__animated animate__pulse">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

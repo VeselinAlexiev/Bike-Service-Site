@@ -1,0 +1,79 @@
+﻿@model IEnumerable<BikeService.Web.ViewModel.Shop.ShopItemViewModel>
+
+@{
+    ViewData["Title"] = "My Cart";
+    var total = Model.Sum(i => i.Price * i.Quantity);
+}
+
+<div class="container mt-5 text-light">
+    <h2 class="text-warning fw-bold mb-4 text-center">🛒 My Cart</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Your cart is empty.
+        </div>
+    }
+    else
+    {
+        <div class="bg-dark border border-warning rounded p-4 mb-4">
+            <h5 class="text-light">
+                You have <span class="text-warning fw-bold">@Model.Count()</span> item(s) in your cart.
+            </h5>
+            <h4 class="text-warning mt-2 fw-bold">Total: @total.ToString("C")</h4>
+        </div>
+
+        <div class="table-responsive mb-4">
+            <table class="table table-dark table-hover border border-warning text-center align-middle">
+                <thead class="table-warning text-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><img src="@item.ImageUrl" alt="@item.Name" width="80" class="rounded"></td>
+                            <td>@item.Name</td>
+                            <td>@item.Type</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <form asp-action="DecreaseQuantity" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-outline-light btn-sm">-</button>
+                                    </form>
+                                    <input type="text" class="form-control bg-dark text-light border-light text-center" value="@item.Quantity" readonly />
+                                    <form asp-action="IncreaseQuantity" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-outline-light btn-sm">+</button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@(item.Price * item.Quantity).ToString("C")</td>
+                            <td>
+                                <a href="@Url.Action("RemoveFromCart", "Shop", new { id = item.Id })"
+                                   class="btn btn-sm btn-outline-danger fw-bold">
+                                    Remove
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-grid">
+            <a href="/Order/Checkout" class="btn btn-warning fw-bold btn-lg shadow">
+                Proceed to Checkout
+            </a>
+        </div>
+    }
+</div>
