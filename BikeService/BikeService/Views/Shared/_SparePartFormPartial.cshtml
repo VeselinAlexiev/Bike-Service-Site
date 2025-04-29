@@ -1,0 +1,30 @@
+﻿@model BikeService.Data.Entities.SparePart
+<input type="hidden" asp-for="Id" />
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control"></textarea>
+</div>
+<div class="mb-3">
+    <label asp-for="Price" class="form-label"></label>
+    <input asp-for="Price" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Compatibility" class="form-label"></label>
+    <input asp-for="Compatibility" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="StockQuantity" class="form-label"></label>
+    <input asp-for="StockQuantity" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="ImageUrl" class="form-label"></label>
+    <input asp-for="ImageUrl" class="form-control" />
+</div>
+<div class="form-check mb-3">
+    <input asp-for="EcoFriendly" class="form-check-input" />
+    <label asp-for="EcoFriendly" class="form-check-label"></label>
+</div>

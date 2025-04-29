@@ -1,0 +1,55 @@
+﻿@model BikeService.Data.Entities.Appointment
+
+<tr>
+    <td>@Model.Workshop?.Name</td>
+    <td>@Model.User?.Email</td>
+    <td>@Model.AppointmentDate.ToString("dddd, dd MMM yyyy")</td>
+    <td>@Model.AppointmentDate.ToString("HH:mm")</td>
+    <td>
+        @if (Model.Status == "Scheduled")
+        {
+            <span class="badge bg-info text-dark">@Model.Status</span>
+        }
+        else if (Model.Status == "In Progress")
+        {
+            <span class="badge bg-warning text-dark">@Model.Status</span>
+        }
+        else if (Model.Status == "Completed")
+        {
+            <span class="badge bg-success">@Model.Status</span>
+        }
+        else if (Model.Status == "Cancelled")
+        {
+            <span class="badge bg-danger">@Model.Status</span>
+        }
+    </td>
+    <td>
+        <a href="@Url.Action("Details", "Appointment", new { id = Model.Id })" class="btn btn-sm btn-outline-info fw-bold">
+            View Details
+        </a>
+    </td>
+    <td>
+        @if (Model.Status != "Completed" && Model.Status != "Cancelled")
+        {
+            <div class="d-flex flex-column gap-1">
+                <form method="post" asp-action="ChangeStatus" asp-controller="Appointment">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="newStatus" value="In Progress" />
+                    <button type="submit" class="btn btn-sm btn-warning fw-bold w-100">Mark In Progress</button>
+                </form>
+
+                <form method="post" asp-action="ChangeStatus" asp-controller="Appointment">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="newStatus" value="Completed" />
+                    <button type="submit" class="btn btn-sm btn-success fw-bold w-100">Mark Completed</button>
+                </form>
+
+                <form method="post" asp-action="ChangeStatus" asp-controller="Appointment">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="newStatus" value="Cancelled" />
+                    <button type="submit" class="btn btn-sm btn-danger fw-bold w-100">Cancel Appointment</button>
+                </form>
+            </div>
+        }
+    </td>
+</tr>

@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Sidebar {
+    <div class="sidebar bg-dark text-white" style="height: 100vh; position: fixed; width: 250px;">
+        <h4 class="text-center py-3">Admin Panel</h4>
+        <a href="/Admin/Index" class="d-block text-white p-3">Dashboard</a>
+        <a href="/AdminServiceType/Index" class="d-block text-white p-3">Manage Services</a>
+        <a href="/AdminSparePart/Index" class="d-block text-white p-3">Manage Spare Parts</a>
+        <a href="/AdminBicycle/Index" class="d-block text-white p-3">Manage Bicycles</a>
+        <a href="/AdminUser/Index" class="d-block text-white p-3">Manage Users</a>
+        <a href="/AdminWorkshop/Index" class="d-block text-white p-3">Manage Workshops</a>
+        <a href="/AdminWorkshopService/Index" class="d-block text-white p-3">Manage Workshop Services</a>
+        <a href="/Appointment/AdminView" class="d-block text-white p-3">Manage Appointments</a>
+        <a href="/Order/AllOrders" class="d-block text-white p-3">Manage Orders</a>
+    </div>
+}
+
+<div class="content" style="margin-left: 250px; padding: 20px;">
+    @RenderBody()
+</div>
+
+@await RenderSectionAsync("Scripts", required: false)
