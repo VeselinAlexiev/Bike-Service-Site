@@ -1,0 +1,73 @@
+﻿@model IEnumerable<BikeService.Data.Entities.Appointment>
+
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="container mt-5 text-light">
+    <h2 class="text-warning fw-bold mb-4">📅 My Scheduled Appointments</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center fw-bold">
+            You don't have any appointments yet.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var appointment in Model)
+            {
+                <div class="col">
+                    <div class="card bg-dark text-light border-warning h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">@appointment.Workshop.Name</h5>
+                            <p class="card-text">
+                                <strong>Location:</strong> @appointment.Workshop.Location<br />
+                                <strong>Date:</strong> @appointment.AppointmentDate.ToString("dddd, dd MMM yyyy")<br />
+                                <strong>Time:</strong> @appointment.AppointmentDate.ToString("HH:mm")<br />
+                                <strong>Status:</strong>
+                                @if (appointment.Status == "Cancelled")
+                                {
+                                    <span class="text-danger">@appointment.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success">@appointment.Status</span>
+                                }
+                                <br />
+                                @if (!string.IsNullOrEmpty(appointment.Notes))
+                                {
+                                    <strong>Notes:</strong> @appointment.Notes
+                                }
+                            </p>
+                            <hr />
+                            <h6 class="text-warning">Bicycle(s):</h6>
+                            <ul>
+                                @foreach (var bicycle in appointment.AppointmentBicycles)
+                                {
+                                    <li>@bicycle.Bicycle.Brand @bicycle.Bicycle.Model (@bicycle.Bicycle.Year)</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent border-top border-warning d-flex justify-content-between">
+                            @if (appointment.Status != "Cancelled")
+                            {
+                                @if ((appointment.AppointmentDate.Date - DateTime.Today).TotalDays >= 2)
+                                {
+                                    <a href="/Appointment/Edit/@appointment.Id" class="btn btn-sm btn-outline-warning fw-bold">Edit</a>
+                                }
+                                <form asp-action="Cancel" asp-controller="Appointment" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@appointment.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger fw-bold" onclick="return confirm('Are you sure you want to cancel this appointment?');">
+                                        Cancel
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

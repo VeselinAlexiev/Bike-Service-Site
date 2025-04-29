@@ -1,0 +1,43 @@
+﻿@model BikeService.Data.Entities.Appointment
+
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="container mt-5 text-light">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning fw-bold">🛠 Appointment Details</h2>
+        <a href="/Appointment/AdminView" class="btn btn-outline-light">← Back to Appointments</a>
+    </div>
+
+    <div class="bg-dark rounded shadow p-4 mb-4">
+        <h5 class="text-muted mb-2">📍 Workshop:</h5>
+        <p class="text-light-emphasis">@Model.Workshop?.Name</p>
+
+        <h5 class="text-muted mb-2">🗓 Date and Time:</h5>
+        <p class="text-light-emphasis">@Model.AppointmentDate.ToString("dddd, dd MMMM yyyy - HH:mm")</p>
+
+        <h5 class="text-muted mb-2">🚲 Bicycle(s):</h5>
+        @if (Model.AppointmentBicycles.Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var bicycle in Model.AppointmentBicycles)
+                {
+                    <li class="list-group-item bg-dark text-white border-light">
+                        <strong>@bicycle.Bicycle.Brand</strong> - @bicycle.Bicycle.Model (@bicycle.Bicycle.Year) - @bicycle.Bicycle.Type
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-light-emphasis">No bicycle information available.</p>
+        }
+
+        <h5 class="text-muted mb-2 mt-4">📝 Notes:</h5>
+        <p class="text-light-emphasis">@(!string.IsNullOrEmpty(Model.Notes) ? Model.Notes : "No additional notes.")</p>
+
+        <h5 class="text-muted mb-2 mt-4">📌 Status:</h5>
+        <p class="text-info fw-bold">@Model.Status</p>
+    </div>
+</div>
