@@ -1,5 +1,4 @@
-﻿// ProductController.cs - FULLY UPDATED
-using BikeService.Services.Implementation;
+﻿using BikeService.Services.Implementation;
 using BikeService.Web.ViewModel.Details;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

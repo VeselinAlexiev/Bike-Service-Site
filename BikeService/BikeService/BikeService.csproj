@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -24,7 +24,6 @@
     <ProjectReference Include="..\BikeService.Data.Models\BikeService.Data.Models.csproj" />
     <ProjectReference Include="..\BikeService.Data\BikeService.Data.csproj" />
     <ProjectReference Include="..\BikeService.Services\BikeService.Services.csproj" />
-    <ProjectReference Include="..\BikeService.UnitTests\BikeService.UnitTests.csproj" />
     <ProjectReference Include="..\BikeService.Web.ViewModel\BikeService.Web.ViewModel.csproj" />
   </ItemGroup>
 
