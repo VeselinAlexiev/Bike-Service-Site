@@ -30,6 +30,7 @@ public class Program
         builder.Services.AddScoped<IShopService, ShopService>();
         builder.Services.AddScoped<ICartService, CartService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
+        builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
 
         builder.Services.AddMailKit(optionBuilder =>
         {
