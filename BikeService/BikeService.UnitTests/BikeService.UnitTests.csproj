@@ -12,16 +12,24 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.36" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.36" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.36" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.36" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.36">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BikeService.Data\BikeService.Data.csproj" />
+    <ProjectReference Include="..\BikeService.Services\BikeService.Services.csproj" />
+    <ProjectReference Include="..\BikeService\BikeService.csproj" />
   </ItemGroup>
 
 </Project>

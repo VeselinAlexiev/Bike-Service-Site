@@ -1,1 +1,9 @@
 global using NUnit.Framework;
+global using BikeService.Data.Entities;
+global using BikeService.Data;
+global using BikeService.Services.Implementation;
+global using Microsoft.EntityFrameworkCore;
+global using BikeService.Web.ViewModel.Details;
+global using Microsoft.AspNetCore.Mvc;
+global using Moq;
+global using BikeService.Controllers;
